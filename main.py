@@ -34,8 +34,7 @@ def webhook():
                 records = cursor.fetchall()
 
                 for row in records:
-                    response = row[0]
-                    print("Your savings balance is = ", row[0])
+                    ful = row[0]
             except Error as e:
                 print ("Error while connecting to MySQL", e)
             finally:
@@ -63,7 +62,7 @@ def webhook():
                 if(mySQLconnection .is_connected()):
                     mySQLconnection.close()
                     print("MySQL connection is closed")
-    return str(response)
+    return ful
 
 
 if __name__ == '__main__':
