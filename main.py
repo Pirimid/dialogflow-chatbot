@@ -21,7 +21,7 @@ def webhook():
         return 'json error'
 
     if parameters.get('account'):
-        if parameters.get('account') == 'savings':
+        if str(parameters.get('account')) == str('savings'):
             try:
                 mySQLconnection = mysql.connector.connect(host='203.88.129.243',
                     database='banking',
