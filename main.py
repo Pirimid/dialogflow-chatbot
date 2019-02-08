@@ -35,6 +35,8 @@ def webhook():
 
                 for row in records:
                     ful = row[0]
+                    ful = json.loads(ful)
+                    print("Your savings balance is = ", row[0])
             except Error as e:
                 print ("Error while connecting to MySQL", e)
             finally:
