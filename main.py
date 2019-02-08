@@ -64,7 +64,7 @@ def webhook():
                 if(mySQLconnection .is_connected()):
                     mySQLconnection.close()
                     print("MySQL connection is closed")
-    return make_response(jsonify({'displayText': ful_send}))
+    return make_response(jsonify({'messages': ful_send}))
 
 
 if __name__ == '__main__':
