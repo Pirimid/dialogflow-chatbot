@@ -41,7 +41,6 @@ def webhook():
             finally:
                 if(mySQLconnection .is_connected()):
                     mySQLconnection.close()
-                    print("MySQL connection is closed")
 
         if parameters.get('account') == 'current':
             try:
@@ -64,7 +63,7 @@ def webhook():
                 if(mySQLconnection .is_connected()):
                     mySQLconnection.close()
                     print("MySQL connection is closed")
-    return str(response)
+    return make_response(jsonify({'fulfillmentText': response})
 
 
 if __name__ == '__main__':
