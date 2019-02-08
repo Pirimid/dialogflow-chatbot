@@ -35,6 +35,7 @@ def webhook():
 
                 for row in records:
                     ful = row[0]
+                    ful_send = str(ful)
                     print("Your savings balance is = ", row[0])
             except Error as e:
                 print ("Error while connecting to MySQL", e)
@@ -63,7 +64,7 @@ def webhook():
                 if(mySQLconnection .is_connected()):
                     mySQLconnection.close()
                     print("MySQL connection is closed")
-    return json.loads(ful)
+    return make_response(jsonify({'fulfillmentText': ful_send}))
 
 
 if __name__ == '__main__':
