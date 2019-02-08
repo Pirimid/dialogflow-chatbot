@@ -64,7 +64,7 @@ def webhook():
                 if(mySQLconnection .is_connected()):
                     mySQLconnection.close()
                     print("MySQL connection is closed")
-    return ful
+    return str(ful)
 
 
 if __name__ == '__main__':
