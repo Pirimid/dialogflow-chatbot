@@ -16,7 +16,7 @@ def webhook():
     req = request.get_json(silent=True, force=True)
     print(req)
     try:
-        action = req.get('queryResult').get('action')
+        action = req.get('result').get('action')
     except AttributeError:
         return 'json error'
 
@@ -72,7 +72,7 @@ def webhook():
 
 
 def check_balance(req):
-    parameters = req['queryResult']['parameters']
+    parameters = req['result']['parameters']
 
     print('Dialogflow parameters:')
     print(json.dumps(parameters, indent=4))
