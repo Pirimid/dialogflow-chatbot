@@ -92,7 +92,7 @@ def check_balance(req):
 
                 for row in records:
                     bal = row[0]
-                    bal = json.dumps('Your Current balance is:'bal)
+                    bal = json.dumps('Your Current balance is:' bal)
                     
 
             except Error as e:
