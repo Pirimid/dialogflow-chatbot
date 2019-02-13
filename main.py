@@ -92,6 +92,7 @@ def check_balance(req):
 
                 for row in records:
                     bal = row[0]
+                    return 'Your Savings balance is: %s' % bal
                     
 
             except Error as e:
@@ -111,12 +112,10 @@ def check_balance(req):
 
                 for row in records:
                     bal = row[0]
-                    bal = str('Your Current balance is:', bal)
+                    return 'Your Current balance is: %s' % bal
 
             except Error as e:
                 print ("Error while connecting to MySQL", e)
-
-    return 'Your Savings balance is: %s' % bal
 
 
 
