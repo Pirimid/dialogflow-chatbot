@@ -92,6 +92,7 @@ def check_balance(req):
 
                 for row in records:
                     bal = row[0]
+                    bal = json.dumps(bal)
 
             except Error as e:
                 print ("Error while connecting to MySQL", e)
