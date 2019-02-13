@@ -79,44 +79,39 @@ def check_balance(req):
 
     if parameters.get('account'):
         if str(parameters.get('account')) == str('savings'):
-            try:
-                mySQLconnection = mysql.connector.connect(host='203.88.129.243',
-                    database='banking',
-                    user='jaydeep',
-                    password='jaydeep',
-                    port='1234')
-                sql_select_Query = "select Balance from account where AccountType='Savings';'"
-                cursor = mySQLconnection .cursor()
-                cursor.execute(sql_select_Query)
-                records = cursor.fetchall()
+            records = MySQL("select Balance from account where AccountType='Savings';'")
 
-                for row in records:
-                    bal = row[0]
-                    return 'Your Savings balance is: %s' % bal
-                    
-
-            except Error as e:
-                print ("Error while connecting to MySQL", e)
+            for row in records:
+                bal = row[0]
+                return 'Your Savings balance is: %s' % bal
 
         elif str(parameters.get('account')) == str('current'):
-            try:
-                mySQLconnection = mysql.connector.connect(host='203.88.129.243',
-                    database='banking',
-                    user='jaydeep',
-                    password='jaydeep',
-                    port='1234')
-                sql_select_Query = "select Balance from account where AccountType='Current';"
-                cursor = mySQLconnection .cursor()
-                cursor.execute(sql_select_Query)
-                records = cursor.fetchall()
+            records = MySQL("select Balance from account where AccountType='Current';'")
 
                 for row in records:
                     bal = row[0]
                     return 'Your Current balance is: %s' % bal
 
-            except Error as e:
-                print ("Error while connecting to MySQL", e)
+def MySQL(querry):
+    try:
+        mySQLconnection = mysql.connector.connect(host='203.88.129.243',
+                    database='banking',
+                    user='jaydeep',
+                    password='jaydeep',
+                    port='1234')
+        sql_select_Query = querry
+        cursor = mySQLconnection .cursor()
+        cursor.execute(sql_select_Query)
+        records = cursor.fetchall()
+        return records
 
+    except Error as e :
+        print ("Error while connecting to MySQL", e)
+
+    finally:
+        if(mySQLconnection .is_connected()):
+            mySQLconnection.close()
+            print("MySQL connection is closed")
 
 
 if __name__ == '__main__':
