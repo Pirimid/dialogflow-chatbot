@@ -22,7 +22,7 @@ def webhook():
 
     if action == 'check_balance':
         res = check_balance(req)
-        return make_response(jsonify({"fullfillmentMessages": [{"text": {"text": [res] } } ]}))
+        return make_response(jsonify({"displayText": res}))
 
 """    if parameters.get('account'):
         if str(parameters.get('account')) == str('savings'):
