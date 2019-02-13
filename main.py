@@ -92,7 +92,7 @@ def check_balance(req):
 
                 for row in records:
                     bal = row[0]
-                    bal = 'Your Savings balance is:', bal
+                    bal = "Your Savings balance is:", bal
                     bal = str(bal)
 
             except Error as e:
