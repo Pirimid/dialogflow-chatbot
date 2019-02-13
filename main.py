@@ -16,11 +16,15 @@ def webhook():
     req = request.get_json(silent=True, force=True)
     print(req)
     try:
-        parameters = req['result']['parameters']
+        action = req.get('queryResult').get('action')
     except AttributeError:
         return 'json error'
 
-    if parameters.get('account'):
+    if action == 'check_balance':
+        res = check_balance(req)
+        return make_response(jsonify({"speech": res}))
+
+"""    if parameters.get('account'):
         if str(parameters.get('account')) == str('savings'):
             try:
                 mySQLconnection = mysql.connector.connect(host='203.88.129.243',
@@ -63,8 +67,58 @@ def webhook():
             finally:
                 if(mySQLconnection .is_connected()):
                     mySQLconnection.close()
-                    print("MySQL connection is closed")
-    return make_response(jsonify({"speech": ful_send}))
+                    print("MySQL connection is closed")"""
+    
+
+
+def check_balance(req):
+    parameters = req['queryResult']['parameters']
+
+    print('Dialogflow parameters:')
+    print(json.dumps(parameters, indent=4))
+
+    if parameters.get('account'):
+        if str(parameters.get('account')) == str('savings'):
+            try:
+                mySQLconnection = mysql.connector.connect(host='203.88.129.243',
+                    database='banking',
+                    user='jaydeep',
+                    password='jaydeep',
+                    port='1234')
+                sql_select_Query = "select Balance from account where AccountType='Savings';'"
+                cursor = mySQLconnection .cursor()
+                cursor.execute(sql_select_Query)
+                records = cursor.fetchall()
+
+                for row in records:
+                    bal = row[0]
+                    bal = Your Savings balance is:, bal
+                    bal = json.dumps(bal)
+
+            except Error as e:
+                print ("Error while connecting to MySQL", e)
+
+        elif str(parameters.get('account')) == str('current'):
+            try:
+                mySQLconnection = mysql.connector.connect(host='203.88.129.243',
+                    database='banking',
+                    user='jaydeep',
+                    password='jaydeep',
+                    port='1234')
+                sql_select_Query = "select Balance from account where AccountType='Current';"
+                cursor = mySQLconnection .cursor()
+                cursor.execute(sql_select_Query)
+                records = cursor.fetchall()
+
+                for row in records:
+                    bal = row[0]
+                    bal = str(json.dumps('Your Current balance is:', bal))
+
+            except Error as e:
+                print ("Error while connecting to MySQL", e)
+
+    return bal
+
 
 
 if __name__ == '__main__':
