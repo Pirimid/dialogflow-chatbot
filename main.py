@@ -92,7 +92,6 @@ def check_balance(req):
 
                 for row in records:
                     bal = row[0]
-                    bal = json.dumps('Your Current balance is:' bal)
                     
 
             except Error as e:
@@ -112,12 +111,12 @@ def check_balance(req):
 
                 for row in records:
                     bal = row[0]
-                    bal = str(json.dumps('Your Current balance is:', bal))
+                    bal = str('Your Current balance is:', bal)
 
             except Error as e:
                 print ("Error while connecting to MySQL", e)
 
-    return bal
+    return 'Your Savings balance is: %s' % bal
 
 
 
