@@ -88,9 +88,9 @@ def check_balance(req):
         elif str(parameters.get('account')) == str('current'):
             records = MySQL("select Balance from account where AccountType='Current';'")
 
-                for row in records:
-                    bal = row[0]
-                    return 'Your Current balance is: %s' % bal
+            for row in records:
+                bal = row[0]
+                return 'Your Current balance is: %s' % bal
 
 def MySQL(querry):
     try:
