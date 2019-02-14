@@ -75,6 +75,6 @@ def get_transactions(req):
     miniStatement = []
     for row in records:
         miniStatement.append('TransactionID: %s ' %row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6])
-    return miniStatement
+    return str(miniStatement)
 if __name__ == '__main__':
     app.run()
