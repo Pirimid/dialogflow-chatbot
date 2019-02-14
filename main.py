@@ -73,8 +73,7 @@ def MySQL(querry):
 
 def get_transactions(req):
     records = MySQL("select * from transaction order by TranscationDate DESC LIMIT 10 ;")
-    for row in records:
-        return 'TransactionID: %s ' %row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6] + '\n'
+    return records
 
 
 if __name__ == '__main__':
