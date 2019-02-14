@@ -85,7 +85,7 @@ def get_transactions(req):
     y['Credit'] = credit
     df = pd.DataFrame(y)
     # print(df.to_string())
-    return df.to_string()
+    return df.to_string() 
 
 if __name__ == '__main__':
     app.run()
