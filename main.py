@@ -98,7 +98,7 @@ def get_transactions(req):
     # print(df.to_string()) 
     
 def transactionsLoop(row):
-    return 'TransactionID: %s'%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6] + '\n'
+    return 'TransactionID: %s'%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6] + '\n \n'
 
 if __name__ == '__main__':
     app.run()
