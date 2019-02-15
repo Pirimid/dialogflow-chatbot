@@ -1,5 +1,4 @@
 import json
-import pandas as pd
 from flask import Flask, request, make_response, jsonify
 
 import mysql.connector
@@ -75,17 +74,31 @@ def get_transactions(req):
     records = MySQL("select * from transaction order by TranscationDate DESC LIMIT 10 ;")
     tr = []
     credit = []
-    y = {}
+    n = 0
+    y = []
+    st = ''
     for row in records:
-        tr.append(row[0])
-        credit.append(row[2])
+        st = st + 'TransactionID: %s'%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6] + '\n'
+        print(st)
+        # y.append(transactionsLoop(row))
+        # for x in y:
+        #     return y[n]
+        #     n+=1
+        #     print(y[n])
+        #     pass
+        #tr.append(row[0])
+        #credit.append(row[2])
         # y = {'TransactionID': row[0]}
+    return st
         #+ 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6] + '\n'}
-    y['TransactionID'] = tr
-    y['Credit'] = credit
-    df = pd.DataFrame(y)
-    # print(df.to_string())
-    return df.to_string() 
+    #y['TransactionID'] = tr
+    # print(y)
+    # y['Credit'] = credit
+    #df = pd.DataFrame(y)
+    # print(df.to_string()) 
+    
+def transactionsLoop(row):
+    return 'TransactionID: %s'%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6] + '\n'
 
 if __name__ == '__main__':
     app.run()
