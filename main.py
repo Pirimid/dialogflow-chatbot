@@ -83,14 +83,14 @@ def get_transactions(req):
                     #TransactionID: %s '%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6]
                     print(st)
             return st
-        else:
-            records = MySQL("select *,DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction order by TranscationDate DESC LIMIT 10 ;")
-            st = ''
-            for row in records:
-                st = st + 'You had performed %s ' %row[5] + 'Type of Transaction On %s ' %row[7] + 'And it was of Credit: %s ' %row[2] + '& Debit: %s ' %row[3] + ', after which the balance was: %s ' %row[4] + "\n " 
-                #TransactionID: %s '%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6]
-                print(st)
-            return st
+    else:
+        records = MySQL("select *,DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction order by TranscationDate DESC LIMIT 10 ;")
+        st = ''
+        for row in records:
+            st = st + 'You had performed %s ' %row[5] + 'Type of Transaction On %s ' %row[7] + 'And it was of Credit: %s ' %row[2] + '& Debit: %s ' %row[3] + ', after which the balance was: %s ' %row[4] + "\n " 
+            #TransactionID: %s '%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6]
+            print(st)
+        return st
     
 def transactionsLoop(row):
     return 'TransactionID: %s'%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6]
