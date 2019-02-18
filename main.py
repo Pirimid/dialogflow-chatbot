@@ -80,9 +80,17 @@ def get_transactions(req):
             st = ''
             for row in records:
                     st = st + 'Your last %s'%type_of_transaction+' was performed on %s'%row[3]+' with Credit: %s'%row[0]+', Debit: %s'%row[1]+' and Balance was after that: %s'%row[2]+ "\n " 
-                    #TransactionID: %s '%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6]
                     print(st)
             return st
+
+        if parameters.get('last'):
+            querry_pre = "select Credit, Debit, Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction order by TranscationDate DESC LIMIT 1;"
+            records = MySQL(querry_pre)
+            st = ''
+            for row in records:
+                    st = st + 'Your last transaction was performed on %s'%row[3]+' with Credit: %s'%row[0]+', Debit: %s'%row[1]+' and Balance was after that: %s'%row[2]+ "\n " 
+                    print(st)
+            return st            
     else:
         records = MySQL("select *,DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction order by TranscationDate DESC LIMIT 10 ;")
         st = ''
