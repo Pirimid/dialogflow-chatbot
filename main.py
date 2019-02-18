@@ -73,7 +73,7 @@ def MySQL(querry):
 def get_transactions(req):
     parameters = req['result']['parameters']
     if parameters.get('transaction') or parameters.get('last') or parameters.get('date') or parameters.get('number') or parameters.get('date-period'):
-        if parameters.get('last') and parameters.get('number'):
+        if parameters.get('number'):
             number_days = parameters.get('number')
             querry_pre = "select Credit, Debit, Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction order by TranscationDate DESC LIMIT {};".format(number_days)
             records = MySQL(querry_pre)
