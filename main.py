@@ -1,6 +1,11 @@
 import json
 from flask import Flask, request, make_response, jsonify
-
+import datetime
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from dateutil import parser
+from matplotlib import style
+style.use('fivethirtyeight')
 import mysql.connector
 from mysql.connector import Error
 
@@ -24,9 +29,11 @@ def webhook():
     elif action == 'get_transactions':
         res = get_transactions(req)
 
+    elif action == 'get_cibilscore':
+        res = get_cibilscore(req)
+
     
     return make_response(jsonify({"speech": res}))
-
 
 def check_balance(req):
     parameters = req['result']['parameters']
@@ -75,41 +82,54 @@ def get_transactions(req):
     if parameters.get('transaction') or parameters.get('last') or parameters.get('date') or parameters.get('number') or parameters.get('date-period'):
         if parameters.get('number'):
             number_days = parameters.get('number')
-            querry_pre = "select Credit, Debit, Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction order by TranscationDate DESC LIMIT {};".format(number_days)
+            querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction inner join Account on transaction.AccountID = account.AccountID order by TranscationDate DESC LIMIT {};".format(number_days)
             records = MySQL(querry_pre)
             st = ''
             for row in records:
-                    st = st + 'Transaction was performed on %s'%row[3]+' with Credit: %s'%row[0]+', Debit: %s'%row[1]+' and Balance after that was: %s'%row[2]+ "\n" 
-                    print(st)
+                    st = st + 'Date: %s'%row[4]+', Credit: %s'%row[1]+', Debit: %s'%row[2]+' from %s'%row[0]+' and Balance after that was: %s'%row[3]+ "\n"
             return st
 
         if parameters.get('transaction') and parameters.get('last'):
             type_of_transaction = parameters.get('transaction')
-            querry_pre = "select Credit, Debit, Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction where(TransactionType = '{}') order by TranscationDate DESC LIMIT 1;".format(type_of_transaction)
+            querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction inner join Account on transaction.AccountID = account.AccountID where(TransactionType = '{}') order by TranscationDate DESC LIMIT 1;".format(type_of_transaction)
             records = MySQL(querry_pre)
             st = ''
             for row in records:
-                    st = st + 'Your last %s'%type_of_transaction+' was performed on %s'%row[3]+' with Credit: %s'%row[0]+', Debit: %s'%row[1]+' and Balance after that was: %s'%row[2]+ "\n" 
-                    print(st)
+                    st = st + 'Last %s'%type_of_transaction+' was on %s'%row[4]+' with Credit: %s'%row[1]+', Debit: %s'%row[2]+' from %s'%row[0]+' Balance after that was: %s'%row[3]+ "\n" 
             return st
 
         elif parameters.get('last'):
-            querry_pre = "select Credit, Debit, Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction order by TranscationDate DESC LIMIT 1;"
+            querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction inner join Account on transaction.AccountID = account.AccountID order by TranscationDate DESC LIMIT 1;"
             records = MySQL(querry_pre)
             st = ''
             for row in records:
-                    st = st + 'Your last transaction was performed on %s'%row[3]+' with Credit: %s'%row[0]+', Debit: %s'%row[1]+' and Balance after that was: %s'%row[2]+ "\n" 
-                    print(st)
+                    st = st + 'Your last transaction was performed on %s'%row[4]+' with Credit: %s'%row[1]+', Debit: %s'%row[2]+' from %s'%row[0]+' and Balance after that was: %s'%row[3]+ "\n" 
             return st
 
     else:
         records = MySQL("select *,DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction order by TranscationDate DESC LIMIT 10 ;")
         st = ''
         for row in records:
-            st = st + 'You had performed %s ' %row[5] + 'Type of Transaction On %s ' %row[7] + 'And it was of Credit: %s ' %row[2] + '& Debit: %s ' %row[3] + ', after which the balance was: %s ' %row[4] + "\n" 
+            st = st + 'Type of Transaction: %s ' %row[5] + ', Date: %s ' %row[7] + ', Credit: %s ' %row[2] + '& Debit: %s ' %row[3] + ', balance after that: %s ' %row[4] + "\n" 
             #TransactionID: %s '%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6]
-            print(st)
         return st
+
+"""    records = MySQL("select DATE_FORMAT(TranscationDate, '%m/%d/%Y'), Balance from transaction where(AccountID = '1') order by TranscationDate DESC;")
+    data = records
+    dates = []
+    values = []
+    for row in data:
+        dates.append(parser.parse(row[0]))
+        values.append(row[1])
+
+    plt.plot_date(dates,values,'-')
+    plt.show()"""
+
+def get_cibilscore(req):
+    records = MySQL("select score from cibil;")
+    for row in records:
+        cibil = row[0]
+        return 'Your CIBIL score is: %s' % cibil
 
 if __name__ == '__main__':
     app.run()
