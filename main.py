@@ -25,6 +25,8 @@ def webhook():
 
     elif action == 'get_cibilscore':
         res = get_cibilscore(req)
+        if cibil<650:
+            res = res + '\n' + 'I see you have a low CIBIL score. Want to know how you can improve it? Check out: https://www.rediff.com/getahead/report/money-7-quick-steps-to-improve-your-cibil-score/20150921.htm'
 
     
     return make_response(jsonify({"speech": res}))
@@ -121,9 +123,10 @@ def get_transactions(req):
 
 def get_cibilscore(req):
     records = MySQL("select score from cibil;")
+    global cibil
     for row in records:
         cibil = row[0]
-        return 'Your CIBIL score is: %s' % cibil
+    return 'Your CIBIL score is: %s' % cibil
 
 if __name__ == '__main__':
     app.run()
