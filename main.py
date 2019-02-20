@@ -1,11 +1,5 @@
 import json
 from flask import Flask, request, make_response, jsonify
-import datetime
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-from dateutil import parser
-from matplotlib import style
-style.use('fivethirtyeight')
 import mysql.connector
 from mysql.connector import Error
 
