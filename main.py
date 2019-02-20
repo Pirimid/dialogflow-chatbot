@@ -82,7 +82,10 @@ def get_transactions(req):
             records = MySQL(querry_pre)
             st = ''
             for row in records:
-                    st = st + 'Date: %s'%row[4]+', Credit: %s'%row[1]+', Debit: %s'%row[2]+' from %s'%row[0]+' and Balance after that was: %s'%row[3]+ "\n"
+                if row[1]==0:
+                    st = st + 'Date: %s'%row[4]+', Debit: %s'%row[2]+' from %s'%row[0] + "\n"
+                else:
+                    st = st + 'Date: %s'%row[4]+', Credit: %s'%row[1]+' from %s'%row[0] + "\n"
             return st
 
         if parameters.get('transaction') and parameters.get('last'):
@@ -91,7 +94,10 @@ def get_transactions(req):
             records = MySQL(querry_pre)
             st = ''
             for row in records:
-                    st = st + 'Last %s'%type_of_transaction+' was on %s'%row[4]+' with Credit: %s'%row[1]+', Debit: %s'%row[2]+' from %s'%row[0]+' Balance after that was: %s'%row[3]+ "\n" 
+                if row[1]==0:
+                    st = st + 'Last %s'%type_of_transaction+' was on %s'%row[4]+' with Debit: %s'%row[2]+' from %s'%row[0]+ "\n"
+                else:
+                    st = st + 'Last %s'%type_of_transaction+' was on %s'%row[4]+' with Credit: %s'%row[1]+' from %s'%row[0]+ "\n"
             return st
 
         elif parameters.get('last'):
@@ -99,14 +105,20 @@ def get_transactions(req):
             records = MySQL(querry_pre)
             st = ''
             for row in records:
-                    st = st + 'Your last transaction was performed on %s'%row[4]+' with Credit: %s'%row[1]+', Debit: %s'%row[2]+' from %s'%row[0]+' and Balance after that was: %s'%row[3]+ "\n" 
+                if row[1]==0:
+                    st = st + 'Your last transaction was performed on %s'%row[4]+' with Debit: %s'%row[2]+' from %s'%row[0]+ "\n"
+                else:
+                    st = st + 'Your last transaction was performed on %s'%row[4]+' with Credit: %s'%row[1]+' from %s'%row[0]+ "\n"
             return st
 
     else:
-        records = MySQL("select *,DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction order by TranscationDate DESC LIMIT 10 ;")
+        records = MySQL("select account.AccountType, Credit, Debit, transaction.TransactionType, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction inner join Account on transaction.AccountID = account.AccountID order by TranscationDate DESC LIMIT 5;")
         st = ''
         for row in records:
-            st = st + 'Type of Transaction: %s ' %row[5] + ', Date: %s ' %row[7] + ', Credit: %s ' %row[2] + '& Debit: %s ' %row[3] + ', balance after that: %s ' %row[4] + "\n" 
+            if row[1]==0:
+                st = st + 'Type: %s ' %row[3] + ', Date: %s ' %row[5] + ', Debit: %s ' %row[2] + ', From: %s'%row[0] + "\n"
+            else: 
+                st = st + 'Type: %s ' %row[3] + ', Date: %s ' %row[5] + ', Credit: %s ' %row[1] + ', From: %s'%row[0] + "\n"
             #TransactionID: %s '%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6]
         return st
 
