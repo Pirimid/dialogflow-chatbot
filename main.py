@@ -28,7 +28,7 @@ def webhook():
         if cibil<650:
             res = res + '\n' + 'I see you have a low CIBIL score. Want to know how you can improve it? Check out: https://www.rediff.com/getahead/report/money-7-quick-steps-to-improve-your-cibil-score/20150921.htm'
 
-    
+
     return make_response(jsonify({"speech": res}))
 
 def check_balance(req):
@@ -78,47 +78,47 @@ def get_transactions(req):
     if parameters.get('transaction') or parameters.get('last') or parameters.get('date') or parameters.get('number') or parameters.get('date-period'):
         if parameters.get('number'):
             number_days = parameters.get('number')
-            querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction inner join Account on transaction.AccountID = account.AccountID order by TranscationDate DESC LIMIT {};".format(number_days)
+            querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y'), description from transaction inner join Account on transaction.AccountID = account.AccountID order by TranscationDate DESC LIMIT {};".format(number_days)
             records = MySQL(querry_pre)
             st = ''
             for row in records:
                 if row[1]==0:
-                    st = st + 'Date: %s'%row[4]+', Debit: %s'%row[2]+' from %s'%row[0] + "\n"
+                    st = st + 'Date: %s'%row[4]+', Debit: %s'%row[2]+' of: %s'%row[5]+' from %s'%row[0] + "\n"
                 else:
-                    st = st + 'Date: %s'%row[4]+', Credit: %s'%row[1]+' from %s'%row[0] + "\n"
+                    st = st + 'Date: %s'%row[4]+', Credit: %s'%row[1]+' of: %s'%row[5]+' from %s'%row[0] + "\n"
             return st
 
         if parameters.get('transaction') and parameters.get('last'):
             type_of_transaction = parameters.get('transaction')
-            querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction inner join Account on transaction.AccountID = account.AccountID where(TransactionType = '{}') order by TranscationDate DESC LIMIT 1;".format(type_of_transaction)
+            querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y'), description from transaction inner join Account on transaction.AccountID = account.AccountID where(TransactionType = '{}') order by TranscationDate DESC LIMIT 1;".format(type_of_transaction)
             records = MySQL(querry_pre)
             st = ''
             for row in records:
                 if row[1]==0:
-                    st = st + 'Last %s'%type_of_transaction+' was on %s'%row[4]+' with Debit: %s'%row[2]+' from %s'%row[0]+ "\n"
+                    st = st + 'Last %s'%type_of_transaction+' was on %s'%row[4]+' with Debit: %s'%row[2]+' of: %s'%row[5]+' from %s'%row[0]+ "\n"
                 else:
-                    st = st + 'Last %s'%type_of_transaction+' was on %s'%row[4]+' with Credit: %s'%row[1]+' from %s'%row[0]+ "\n"
+                    st = st + 'Last %s'%type_of_transaction+' was on %s'%row[4]+' with Credit: %s'%row[1]+'of: %s'%row[5]+' from %s'%row[0]+ "\n"
             return st
 
         elif parameters.get('last'):
-            querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction inner join Account on transaction.AccountID = account.AccountID order by TranscationDate DESC LIMIT 1;"
+            querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y'), description from transaction inner join Account on transaction.AccountID = account.AccountID order by TranscationDate DESC LIMIT 1;"
             records = MySQL(querry_pre)
             st = ''
             for row in records:
                 if row[1]==0:
-                    st = st + 'Your last transaction was performed on %s'%row[4]+' with Debit: %s'%row[2]+' from %s'%row[0]+ "\n"
+                    st = st + 'Your last transaction was performed on %s'%row[4]+' with Debit: %s'%row[2]+' of: %s'%row[5]+' from %s'%row[0]+ "\n"
                 else:
-                    st = st + 'Your last transaction was performed on %s'%row[4]+' with Credit: %s'%row[1]+' from %s'%row[0]+ "\n"
+                    st = st + 'Your last transaction was performed on %s'%row[4]+' with Credit: %s'%row[1]+' of: %s'%row[5]+' from %s'%row[0]+ "\n"
             return st
 
     else:
-        records = MySQL("select account.AccountType, Credit, Debit, transaction.TransactionType, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y') from transaction inner join Account on transaction.AccountID = account.AccountID order by TranscationDate DESC LIMIT 5;")
+        records = MySQL("select account.AccountType, Credit, Debit, transaction.TransactionType, transaction.Balance, DATE_FORMAT(TranscationDate, '%m/%d/%Y'), description from transaction inner join Account on transaction.AccountID = account.AccountID order by TranscationDate DESC LIMIT 5;")
         st = ''
         for row in records:
             if row[1]==0:
-                st = st + 'Type: %s ' %row[3] + ', Date: %s ' %row[5] + ', Debit: %s ' %row[2] + ', From: %s'%row[0] + "\n"
+                st = st + 'Type: %s ' %row[3] + ', Date: %s ' %row[5] + ', Debit: %s ' %row[2] + ', of: %s'%row[6]+' From: %s'%row[0] + "\n"
             else: 
-                st = st + 'Type: %s ' %row[3] + ', Date: %s ' %row[5] + ', Credit: %s ' %row[1] + ', From: %s'%row[0] + "\n"
+                st = st + 'Type: %s ' %row[3] + ', Date: %s ' %row[5] + ', Credit: %s ' %row[1] + ', of: %s'%row[6]+' From: %s'%row[0] + "\n"
             #TransactionID: %s '%row[0] + 'AccountID: %s '% row[1] + 'Credit: %s ' %row[2] + 'Debit: %s ' %row[3] + 'balance: %s ' %row[4] + 'TransactionType: %s ' %row[5] + 'TranscationDate: %s' %row[6]
         return st
 
