@@ -78,7 +78,8 @@ def MySQL(querry):
 def get_transactions(req):
     parameters = req['result']['parameters']
     date_now = datetime.datetime.now()
-    type_tran = str(('neft'and'imps'and'withdraw')) if parameters.get('transaction')=='' else parameters.get('transaction')
+    type_tran = "('neft'and'imps'and'Withdraw')" if parameters.get('transaction')=='' else parameters.get('transaction')
+    print(type_tran)
     num_tran = '5' if parameters.get('number')=='' else parameters.get('number')
     date_tran = parameters.get('date')
     datePeriod_tran = date_now.strftime("%m-%d-%Y") if parameters.get('date-period')=='' else parameters.get('date-period')
@@ -93,13 +94,13 @@ def get_transactions(req):
     if parameters.get('last'):
         querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance,\
     DATE_FORMAT(TransactionDate, '%m/%d/%Y'), description from transaction inner join \
-    Account on transaction.AccountID = account.AccountID where(TransactionType = '{}' \
+    Account on transaction.AccountID = account.AccountID where(TransactionType = {} \
     AND (TransactionDate BETWEEN '{}' AND '{}') ) order by TransactionDate DESC LIMIT 1;".format(type_tran,start_date,end_date)
 
     else:
         querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance,\
     DATE_FORMAT(TransactionDate, '%m/%d/%Y'), description from transaction inner join \
-    Account on transaction.AccountID = account.AccountID where(TransactionType = '{}' \
+    Account on transaction.AccountID = account.AccountID where(TransactionType = {} \
     AND (TransactionDate BETWEEN '{}' AND '{}') ) order by TransactionDate DESC LIMIT {};".format(type_tran,start_date,end_date,num_tran)
     records = MySQL(querry_pre)
     st = ''
