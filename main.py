@@ -79,16 +79,23 @@ def get_transactions(req):
     parameters = req['result']['parameters']
     date_now = datetime.datetime.now()
     type_tran = "('neft'and'imps'and'Withdraw')" if parameters.get('transaction')=='' else parameters.get('transaction')
-    print(type_tran)
     num_tran = '5' if parameters.get('number')=='' else parameters.get('number')
-    date_tran = parameters.get('date')
-    datePeriod_tran = date_now.strftime("%m-%d-%Y") if parameters.get('date-period')=='' else parameters.get('date-period')
-
-    if datePeriod_tran != parameters.get('date-period'):
-        start_date = datetime.datetime(date_now.year,1,1).strftime("%Y-%m-%d")
-        end_date = datetime.datetime(date_now.year,date_now.month,calendar.mdays[date_now.month]).strftime("%Y-%m-%d")
+    if parameters.get('date'):
+        date_tran = parameters.get('date')
+        year,month,day = date_tran.split('-', 3)
+        year = int(year)
+        month = int(month)
+        day = int(day)
+        start_date = datetime.datetime(year,month,1).strftime("%Y-%m-%d")
+        end_date = datetime.datetime(year,month,calendar.mdays[month]).strftime("%Y-%m-%d")
+        print(start_date,end_date)
     else:
-        start_date,end_date = datePeriod_tran.split('/', 1)
+        datePeriod_tran = date_now.strftime("%m-%d-%Y") if parameters.get('date-period')=='' else parameters.get('date-period')
+        if datePeriod_tran != parameters.get('date-period'):
+            start_date = datetime.datetime(date_now.year,1,1).strftime("%Y-%m-%d")
+            end_date = datetime.datetime(date_now.year,date_now.month,calendar.mdays[date_now.month]).strftime("%Y-%m-%d")
+        else:
+            start_date,end_date = datePeriod_tran.split('/', 1)
 
 
     if parameters.get('last'):
@@ -104,6 +111,7 @@ def get_transactions(req):
     AND (TransactionDate BETWEEN '{}' AND '{}') ) order by TransactionDate DESC LIMIT {};".format(type_tran,start_date,end_date,num_tran)
     records = MySQL(querry_pre)
     st = ''
+    print(records)
     for row in records:
         if row[1]==0:
             st = st + 'Date: %s'%row[4]+', Debit: %s'%row[2]+' of: %s'%row[5]+' from %s'%row[0] + "\n"
