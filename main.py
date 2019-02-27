@@ -79,7 +79,8 @@ def get_transactions(req):
     parameters = req['result']['parameters']
     date_now = datetime.datetime.now()
     type_tran = "('neft'and'imps'and'Withdraw')" if parameters.get('transaction')=='' else parameters.get('transaction')
-    type_tran = "'%s'"%type_tran
+    if parameters.get('transaction'):
+        type_tran = "'%s'"%type_tran
     num_tran = '5' if parameters.get('number')=='' else parameters.get('number')
     accType_tran = "('savings'and'current')" if parameters.get('account')=='' else parameters.get('account')
     if parameters.get('account'):
