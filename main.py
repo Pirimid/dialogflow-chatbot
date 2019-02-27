@@ -82,7 +82,9 @@ def get_transactions(req):
     type_tran = "'%s'"%type_tran
     num_tran = '5' if parameters.get('number')=='' else parameters.get('number')
     accType_tran = "('savings'and'current')" if parameters.get('account')=='' else parameters.get('account')
-    accType_tran = "'%s'"%accType_tran
+    if parameters.get('account'):
+        accType_tran = "'%s'"%accType_tran
+
     if parameters.get('date'):
         date_tran = parameters.get('date')
         year,month,day = date_tran.split('-', 3)
@@ -122,6 +124,7 @@ def get_transactions(req):
     AND (TransactionDate BETWEEN '{}' AND '{}') AND account.AccountType={}".format(start_date,end_date,accType_tran) +")\
      order by TransactionDate DESC LIMIT {};".format(num_tran)
 
+    print("\n \n \n "+querry_pre+"\n \n \n \n ")
     records = MySQL(querry_pre)
     st = ''
     print(records)
