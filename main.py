@@ -30,6 +30,8 @@ def webhook():
         if cibil<650:
             res = res + '\n' + 'I see you have a low CIBIL score. Want to know how you can improve it? Check out: https://www.rediff.com/getahead/report/money-7-quick-steps-to-improve-your-cibil-score/20150921.htm'
 
+    elif action == 'loan_eligibility':
+        res = loan_eligibil(req)
 
     return make_response(jsonify({"speech": res}))
 
@@ -203,6 +205,14 @@ def get_cibilscore(req):
     for row in records:
         cibil = row[0]
     return 'Your CIBIL score is: %s' % cibil
+
+def loan_eligibil(req):
+    parameters = req['result']['parameters']
+    res = get_cibilscore(req)
+    type_of_loan = "Loan" if parameters.get('type_of_loan')=='' else parameters.get('type_of_loan')
+    if cibil<650:
+        res = 'So for {}, you are not eligible as your CIBIL score is: {} which is low for granting you a {}'.format(type_of_loan,cibil,type_of_loan)
+    return res
 
 if __name__ == '__main__':
     app.run()
