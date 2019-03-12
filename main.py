@@ -79,7 +79,7 @@ def MySQL(querry):
 
 def get_transactions(req):
     parameters = req['result']['parameters']
-    given_name = " " if parameters.get('given-name')=='' else "AND Description='{}'".format(parameters.get('given-name'))
+    given_name = " " if parameters.get('given-name')=='' else "AND Description Like '%{}%'".format(parameters.get('given-name'))
     #given_name = "AND Description='{}'".format(parameters.get('given-name') if parameters.get('given-name') != '' else " ")
     date_now = datetime.datetime.now()
     type_tran = "('neft'and'imps'and'Withdraw')" if parameters.get('transaction')=='' else parameters.get('transaction')
