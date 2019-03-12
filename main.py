@@ -79,6 +79,8 @@ def MySQL(querry):
 
 def get_transactions(req):
     parameters = req['result']['parameters']
+    given_name = " " if parameters.get('given-name')=='' else "AND Description='{}'".format(parameters.get('given-name'))
+    #given_name = "AND Description='{}'".format(parameters.get('given-name') if parameters.get('given-name') != '' else " ")
     date_now = datetime.datetime.now()
     type_tran = "('neft'and'imps'and'Withdraw')" if parameters.get('transaction')=='' else parameters.get('transaction')
     if parameters.get('transaction'):
@@ -111,21 +113,28 @@ def get_transactions(req):
     DATE_FORMAT(TransactionDate, '%m/%d/%Y'), description from transaction inner join \
     Account on transaction.AccountID = account.AccountID where(TransactionType = {}".format(type_tran) + " \
     AND (TransactionDate BETWEEN '{}' AND '{}') AND account.AccountType={}".format(start_date,end_date,accType_tran) +")\
-     order by TransactionDate DESC LIMIT {};".format(num_tran)
+     "+given_name+" order by TransactionDate DESC LIMIT {};".format(given_name,num_tran)
 
     elif parameters.get('last'):
         querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance,\
     DATE_FORMAT(TransactionDate, '%m/%d/%Y'), description from transaction inner join \
     Account on transaction.AccountID = account.AccountID where(TransactionType = {}" .format(type_tran) + " \
     AND (TransactionDate BETWEEN '{}' AND '{}') AND account.AccountType={}".format(start_date,end_date,accType_tran) +")\
-     order by TransactionDate DESC LIMIT 1;"
+    "+given_name+" order by TransactionDate DESC LIMIT 1;"
+
+    elif parameters.get('All'):
+        querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance,\
+    DATE_FORMAT(TransactionDate, '%m/%d/%Y'), description from transaction inner join \
+    Account on transaction.AccountID = account.AccountID where(TransactionType = {}".format(type_tran) + " \
+    AND (TransactionDate BETWEEN '{}' AND '{}') AND account.AccountType={}".format(start_date,end_date,accType_tran) +")\
+    "+given_name+" order by TransactionDate"
 
     else:
         querry_pre = "select account.AccountType, Credit, Debit, transaction.Balance,\
     DATE_FORMAT(TransactionDate, '%m/%d/%Y'), description from transaction inner join \
     Account on transaction.AccountID = account.AccountID where(TransactionType = {}".format(type_tran) + " \
     AND (TransactionDate BETWEEN '{}' AND '{}') AND account.AccountType={}".format(start_date,end_date,accType_tran) +")\
-     order by TransactionDate DESC LIMIT {};".format(num_tran)
+    "+given_name+" order by TransactionDate DESC LIMIT {};".format(num_tran)
 
     print("\n \n \n "+querry_pre+"\n \n \n \n ")
     records = MySQL(querry_pre)
