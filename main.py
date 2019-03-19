@@ -144,9 +144,9 @@ def get_transactions(req):
         return "Sorry There are no Transactions available for it."
     for row in records:
         if row[1]==0:
-            st = st + 'Date: %s'%row[4]+', Debit: %s'%row[2]+' of: %s'%row[5]+' from %s'%row[0] + "<br>"
+            st = st + 'Date: %s'%row[4]+', Debit: %s'%row[2]+' of: %s'%row[5]+' from %s'%row[0] + "\n"
         else:
-            st = st + 'Date: %s'%row[4]+', Credit: %s'%row[1]+' of: %s'%row[5]+' from %s'%row[0] + "<br>"
+            st = st + 'Date: %s'%row[4]+', Credit: %s'%row[1]+' of: %s'%row[5]+' from %s'%row[0] + "\n"
     return st
 
 """    if parameters.get('transaction') or parameters.get('last') or parameters.get('date') or parameters.get('number') or 
