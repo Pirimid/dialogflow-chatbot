@@ -163,7 +163,7 @@ def loan_eligibil(req):
     parameters = req['result']['parameters']
     res = get_cibilscore(req)
     type_of_loan = parameters.get('type_of_loan')
-    if type_of_loan == 'Student loan':
+    if type_of_loan == 'student loan':
         res = 'You can get {}, you will be contacted with an bank representative soon'.format(type_of_loan,cibil)
     elif cibil<650:
         res = 'So for {}, you are not eligible as your CIBIL score is: {} which is low for granting you a {}'.format(type_of_loan,cibil,type_of_loan)
