@@ -36,7 +36,7 @@ Here the User will be interacting with the chatbot directly. We here for our dem
 </p>
 
 <p align="center">
-  <img src="images/transactions example 2.jpg" title="image">
+  <img src="images/transactions example 2.png" title="image">
 </p>
 
 The Slack bot is directed to Dialogflow's agent. Dialogflow will then classify the user's message into a specific intent and extract the valuable information from it (Entities) such as account type, date, merchant, etc.
