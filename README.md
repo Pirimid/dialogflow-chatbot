@@ -16,3 +16,37 @@ Here below let's discuss on how the API workflow goes:
 4. After performing all the actions as per the user's needs, our API collects all the answers and converts it into the [Dialogflow's JSON object](https://dialogflow.com/docs/fulfillment/how-it-works) (Dialogflow only accepts a response in JSON format).
 
 After which Dialogflow shows the response to the user according to the fulfillment response which it gets from our APIs.
+
+For better understanding of how the whole process flow works we have divided the whole process into two parts User Side and Server Side. But before that we have simplified the process and shown it in graphical form below:
+
+<p align="center">
+  <img src="images/Architecture.jpg" width="200" height="200" title="image">
+</p>
+
+### User Side
+
+Here the User will be interacting with the chatbot directly. We here for our demo purpose have used Slack by which the user will get bank details. Below are given a few screen shots on how the user will be interact with chatbot:
+
+<p align="center">
+  <img src="images/cibil example.jpg" width="200" height="200" title="image">
+</p>
+
+<p align="center">
+  <img src="images/loan example.jpg" width="200" height="200" title="image">
+</p>
+
+<p align="center">
+  <img src="images/transactions example 2.jpg" width="200" height="200" title="image">
+</p>
+
+The Slack bot is directed to Dialogflow's agent. Dialogflow will then classify the user's message into a specific intent and extract the valuable information from it (Entities) such as account type, date, merchant, etc.
+
+### Server Side
+
+A Webhook call will be made to our API where Dialogflow will send JSON object containing all the required information such as intent, entities, action, time, etc.
+
+A POST request will arrive at our Python API where, according the intent and their specific entities, data will be fetched from the bank servers.
+
+The Data from the bank's database will be then sent back to our API where it will converted into Dialogflow's JSON object format and then sent back to Dialogflow.
+
+Dialogflow will then send the response to the Slack bot which we had integrated for our demo purpose.
