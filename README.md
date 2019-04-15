@@ -20,7 +20,7 @@ After which Dialogflow shows the response to the user according to the fulfillme
 For better understanding of how the whole process flow works we have divided the whole process into two parts User Side and Server Side. But before that we have simplified the process and shown it in graphical form below:
 
 <p align="center">
-  <img src="images/Architecture.jpg" width="200" height="200" title="image">
+  <img src="images/Architecture.jpg" width="600" height="400" title="image">
 </p>
 
 ### User Side
@@ -28,15 +28,15 @@ For better understanding of how the whole process flow works we have divided the
 Here the User will be interacting with the chatbot directly. We here for our demo purpose have used Slack by which the user will get bank details. Below are given a few screen shots on how the user will be interact with chatbot:
 
 <p align="center">
-  <img src="images/cibil example.jpg" width="200" height="200" title="image">
+  <img src="images/cibil example.jpg" title="image">
 </p>
 
 <p align="center">
-  <img src="images/loan example.jpg" width="200" height="200" title="image">
+  <img src="images/loan example.jpg" title="image">
 </p>
 
 <p align="center">
-  <img src="images/transactions example 2.jpg" width="200" height="200" title="image">
+  <img src="images/transactions example 2.jpg" title="image">
 </p>
 
 The Slack bot is directed to Dialogflow's agent. Dialogflow will then classify the user's message into a specific intent and extract the valuable information from it (Entities) such as account type, date, merchant, etc.
